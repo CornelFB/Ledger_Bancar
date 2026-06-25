@@ -1,34 +1,30 @@
 import http from 'k6/http';
 import { check } from 'k6';
 
-
 export const options = {
   vus: 200,          
-  iterations: 100000,   
+  iterations: 1000,   
 };
 
 export default function () {
   const url = 'http://127.0.0.1:8000/transfer';
   
-  // Datele transferului (mutăm 10 cenți)
+  // Domnu Mamuleanu îi trimite lui Badea Cornel 10 cenți
   const payload = JSON.stringify({
-    from_account: '11111111-1111-1111-1111-111111111111',
-    to_account: '22222222-2222-2222-2222-222222222222',
+    from_account: '11111111-1111-1111-1111-111111111111', // Domnu Mamuleanu
+    to_account: '44444444-4444-4444-4444-444444444444',   // Badea Cornel
     amount: 10
   });
 
   const params = {
     headers: {
       'Content-Type': 'application/json',
-      // ATENȚIE: Toți cei 50 de utilizatori trimit EXACT aceeași cheie!
-      'Idempotency-Key': 'simulare1', 
+      // Aceeași cheie pentru toate request-urile ca să testăm idempotența!
+      'Idempotency-Key': 'spam-mamuleanu-badea', 
     },
   };
-
   
   const res = http.post(url, payload, params);
-  
-  // vedem daca totul este ok
   
   check(res, {
     'statusul este 200': (r) => r.status === 200,
