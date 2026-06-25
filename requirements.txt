@@ -1,5 +1,5 @@
-fastapi==0.103.1 //conexiunea
-uvicorn==0.23.2 //motor
-asyncpg==0.28.0 //curier
-redis==5.0.0   //interfon
-pydantic==2.3.0  //paznic
+fastapi==0.103.1
+uvicorn==0.23.2
+asyncpg==0.29.0
+redis==5.0.0
+pydantic==2.3.0
