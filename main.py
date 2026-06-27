@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Header, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import asyncpg
 import redis.asyncio as redis
@@ -6,6 +7,17 @@ import uuid
 import json
 
 app = FastAPI(title="Ledger Bancar Idempotent")
+
+#CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permite oricărui fișier HTML să ceară date
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 
 db_pool = None
 redis_client = None
