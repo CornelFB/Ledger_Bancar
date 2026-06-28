@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Ledger Bancar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f6f9; padding-top: 40px; }
+        .card { box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 12px; border: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center mb-5 text-primary">🏦 Dashboard - Ledger Bancar</h1>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-4">
+                <h3 class="mb-4 border-bottom pb-2">📊 Solduri Clienți</h3>
+                
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nume Client</th>
+                            <th class="text-end">Sold (cenți)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel-solduri">
+                        <tr><td colspan="2" class="text-center">Se încarcă datele din bancă...</td></tr>
+                    </tbody>
+                </table>
+                
+                <div class="alert alert-info mt-3">
+                    <strong>Total bani în sistem: </strong> <span id="total-bani">Se calculează...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Această funcție se conectează la backend-ul tău din Python
+    async function incarcaDatele() {
+        try {
+            // Sunăm la ușa băncii (ruta de audit)
+            const raspuns = await fetch('http://127.0.0.1:8000/audit');
+            const date = await raspuns.json();
+            
+            // Completăm totalul
+            document.getElementById('total-bani').innerText = date.total_bani_in_sistem + " cenți";
+            
+            // Construim tabelul cu clienți
+            const tabel = document.getElementById('tabel-solduri');
+            tabel.innerHTML = ''; // Curățăm mesajul de încărcare
+            
+            // Trecem prin fiecare persoană primită de la bancă
+            for (const [nume, sold] of Object.entries(date.solduri_persoane)) {
+                tabel.innerHTML += `
+                    <tr>
+                        <td class="fw-bold text-secondary">${nume}</td>
+                        <td class="text-end text-success fw-bold">${sold}</td>
+                    </tr>
+                `;
+            }
+        } catch (eroare) {
+            document.getElementById('tabel-solduri').innerHTML = 
+                `<tr><td colspan="2" class="text-center text-danger">Eroare de conectare. Asigură-te că serverul Python rulează!</td></tr>`;
+        }
+    }
+
+    // Apelăm funcția imediat ce se deschide pagina
+    incarcaDatele();
+    
+    // Opțional: Se actualizează automat la fiecare 2 secunde (ca să vezi live cum se schimbă la K6)
+    setInterval(incarcaDatele, 2000);
+</script>
+
+</body>
+</html>
