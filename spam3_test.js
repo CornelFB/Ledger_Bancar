@@ -55,3 +55,4 @@ export default function () {
   check(res, {
     'statusul este 200': (r) => r.status === 200,
   });
+}
