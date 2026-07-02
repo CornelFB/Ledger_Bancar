@@ -1,6 +1,8 @@
 # Ledger_Bancar
 🏦 Ledger Bancar Idempotent - Core Banking System
 Proiectul reprezintă backend-ul unui sistem bancar care gestionează corect tranzacțiile financiare sub trafic ridicat. Aplicația asigură că datele rămân corecte chiar și când mii de utilizatori fac transferuri în același timp.
+
+
 ✨ Caracteristici Tehnice Principale
 
 🔒 Tranzacții ACID & Pessimistic Locking – Previne race condition-urile prin blocarea rândurilor din baza de date la nivel de tranzacție (SELECT ... FOR UPDATE). Dacă 100 de cereri încearcă să modifice același cont simultan, ele sunt procesate pe rând, fără să corupă soldul.
@@ -26,3 +28,4 @@ Deschide index.html  în orice browser. Datele se actualizează automat din serv
 3. Teste de stres
 -k6 run spam_test.js
 -k6 run spam2_test.js
+-k6 run spam3_test.js
